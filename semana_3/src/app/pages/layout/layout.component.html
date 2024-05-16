@@ -1,0 +1,26 @@
+<mat-drawer-container class="container">
+  <mat-drawer mode="side" opened class="container__sidebar">
+    <picture>
+      <source srcset="assets/images/logo.png" type="image/png" />
+      <img
+        src="assets/images/logo.png"
+        alt="Logo super peças"
+        class="sidebar__image"
+      />
+    </picture>
+    <mat-nav-list>
+      @for (link of navLinks; track link) {
+      <a
+        mat-list-item
+        [routerLink]="link.path"
+        [routerLinkActive]="['active']"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >{{ link.label }}</a
+      >
+      }
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content class="container__content">
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
