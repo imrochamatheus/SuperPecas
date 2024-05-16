@@ -14,7 +14,7 @@
         mat-list-item
         [routerLink]="link.path"
         [routerLinkActive]="['active']"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="{ exact: !link.path }"
         >{{ link.label }}</a
       >
       }
