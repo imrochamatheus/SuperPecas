@@ -4,7 +4,6 @@ import { PartsComponent } from "./parts.component";
 export const partsRoutes: Routes = [
   {
     path: "",
-    pathMatch: "full",
     component: PartsComponent,
     children: [
       {
@@ -15,7 +14,7 @@ export const partsRoutes: Routes = [
           ),
       },
       {
-        path: "edit/:id",
+        path: ":id/edit",
         loadComponent: () =>
           import("./edit-parts/edit-parts.component").then(
             (m) => m.EditPartsComponent

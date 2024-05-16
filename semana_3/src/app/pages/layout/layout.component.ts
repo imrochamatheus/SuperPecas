@@ -24,7 +24,7 @@ import { NavLink } from "./layout.interfaces";
 })
 export class LayoutComponent {
   public readonly navLinks: NavLink[] = [
-    { label: "Home", path: "/home" },
+    { label: "Home", path: "" },
     { label: "Carros", path: "cars" },
     { label: "Peças", path: "parts" },
   ];
