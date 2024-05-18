@@ -58,14 +58,14 @@ export class CarsService {
   }
 
   public createCar(payload: CreateCarRequest): Observable<CreateCarResponse> {
-    return this._http.post<CreateCarResponse>(`${this.baseUrl}/criar`, payload);
+    return this._http.post<CreateCarResponse>(`${this.baseUrl}`, payload);
   }
 
   public updateCar(payload: CreateCarRequest): Observable<CreateCarResponse> {
     return this._http.put<CreateCarResponse>(`${this.baseUrl}`, payload);
   }
 
-  public deleteCar(id: number): Observable<void> {
+  public deleteCar(id: string): Observable<void> {
     return this._http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
