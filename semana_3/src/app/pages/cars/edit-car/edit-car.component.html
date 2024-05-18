@@ -1,1 +1,47 @@
-<p>edit-car works!</p>
+<app-header [title]="headerTitle"></app-header>
+
+<section class="container">
+  <button
+    mat-raised-button
+    color="primary"
+    class="container__button-back"
+    (click)="goBack()"
+  >
+    Voltar
+  </button>
+
+  <section class="container__form-wrapper">
+    <form [formGroup]="carForm" class="form-wrapper__form">
+      <section class="form-group">
+        <label for="nomeModelo">Modelo</label>
+        <input type="text" [formControlName]="formKeys.nomeModelo" />
+      </section>
+      <section class="form-group">
+        <label for="fabricante">Fabricante</label>
+        <input type="text" [formControlName]="formKeys.fabricante" />
+      </section>
+      <section class="form-group">
+        <label for="codigoUnico">Código</label>
+        <input type="text" [formControlName]="formKeys.codigoUnico" />
+      </section>
+    </form>
+    <section class="form-wrapper__actions">
+      <button
+        mat-raised-button
+        class="container__button-back"
+        (click)="onClear()"
+      >
+        Limpar
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="container__button-back"
+        [disabled]="!formIsValid"
+        (click)="onSubmit()"
+      >
+        Gravar
+      </button>
+    </section>
+  </section>
+</section>
