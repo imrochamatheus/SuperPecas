@@ -7,13 +7,13 @@ interface CarCommon {
 }
 
 export interface Car extends CarCommon {
-  id: number;
+  id: string;
 }
 
 export interface CreateCarRequest extends CarCommon {}
 
 export interface CreateCarResponse extends CarCommon {
-  id: number;
+  id: string;
 }
 
 export interface ListCarResponse extends PaginationProperties {
