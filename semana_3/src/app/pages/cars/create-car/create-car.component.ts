@@ -14,7 +14,7 @@ import { FormFieldConfig } from "../../../shared/components/abstract-create-upda
   standalone: true,
   imports: [HeaderComponent, AbstractCreateUpdateComponent],
   template: `
-    <app-header [title]="headerTitle" ]></app-header>
+    <app-header [title]="headerTitle"></app-header>
     <app-abstract-create-update
       [formConfig]="formConfig"
       (submitForm)="submitForm($event)"
