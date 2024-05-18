@@ -2,15 +2,13 @@ import { Table, TableLazyLoadEvent } from "primeng/table";
 import { ConfirmationService, MessageService } from "primeng/api";
 
 import { PaginationProperties } from "../../../interfaces/pagination.interfaces";
+import { ColumnType } from "./abstract-list.interfaces";
 
 export abstract class AbstractList<T extends Object> {
   protected abstract _messageService: MessageService;
   protected abstract _confirmationService: ConfirmationService;
 
-  public abstract readonly columns: {
-    key: keyof T;
-    label: string;
-  }[];
+  public abstract readonly columns: ColumnType<T>[];
 
   public items: T[] = [];
   public loading = false;

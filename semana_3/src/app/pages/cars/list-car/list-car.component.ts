@@ -1,10 +1,4 @@
-import {
-  OnInit,
-  inject,
-  Component,
-  ViewChild,
-  AfterViewInit,
-} from "@angular/core";
+import { OnInit, inject, Component, ViewChild } from "@angular/core";
 import { Router, RouterOutlet } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 
@@ -23,6 +17,7 @@ import { Car } from "../../../interfaces/cars.interfaces";
 import { CarsService } from "../../../shared/services/cars.service";
 import { AbstractList } from "../../../shared/utils/abstract-list/abstract-list";
 import { HeaderComponent } from "../../../shared/components/header/header.component";
+import { ColumnType } from "../../../shared/utils/abstract-list/abstract-list.interfaces";
 
 @Component({
   selector: "app-list-car",
@@ -55,10 +50,7 @@ export class ListCarComponent extends AbstractList<Car> implements OnInit {
 
   @ViewChild("dt") public tableRef?: Table;
 
-  public override columns: {
-    key: keyof Car;
-    label: string;
-  }[] = [
+  public override columns: ColumnType<Car>[] = [
     { key: "nomeModelo", label: "Nome do Modelo" },
     { key: "fabricante", label: "Fabricante" },
     { key: "codigoUnico", label: "Código Único" },
