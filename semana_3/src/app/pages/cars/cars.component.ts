@@ -7,11 +7,13 @@ import {
 } from "@angular/router";
 
 import { Subject, filter, takeUntil } from "rxjs";
+import { CarsService } from "../../shared/services/cars.service";
 
 @Component({
   selector: "app-cars",
   standalone: true,
   imports: [RouterOutlet],
+  providers: [CarsService],
   template: "<router-outlet/>",
 })
 export class CarsComponent implements OnInit {

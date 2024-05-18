@@ -1,114 +1,134 @@
-import { Location } from "@angular/common";
-import { ActivatedRoute } from "@angular/router";
-import { Component, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  Validators,
-  FormControl,
-  ReactiveFormsModule,
-} from "@angular/forms";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import { take } from "rxjs";
 
-import { MessageService } from "primeng/api";
-import { MatButton } from "@angular/material/button";
-
-import { HeaderComponent } from "../../../shared/components/header/header.component";
 import { CarsService } from "../../../shared/services/cars.service";
-import { Car } from "../../../interfaces/cars.interfaces";
-import { AbstractEdit } from "../../../shared/utils/abstract-edit/abstract-edit";
+import { Car, CreateCarRequest } from "../../../interfaces/cars.interfaces";
+import { HeaderComponent } from "../../../shared/components/header/header.component";
+import { AbstractCreateUpdateComponent } from "../../../shared/components/abstract-create-update/abstract-create-update.component";
+import { FormFieldConfig } from "../../../shared/components/abstract-create-update/base-create-update.interfaces";
 
 @Component({
   selector: "app-edit-car",
   standalone: true,
-  imports: [HeaderComponent, ReactiveFormsModule, MatButton],
+  imports: [AbstractCreateUpdateComponent, HeaderComponent],
   providers: [CarsService],
-  templateUrl: "./edit-car.component.html",
-  styleUrl: "./edit-car.component.less",
+  template: ` <app-header [title]="headerTitle"></app-header>
+    <app-abstract-create-update
+      #form
+      [formConfig]="formConfig"
+      (submitForm)="submitForm($event)"
+    ></app-abstract-create-update>`,
 })
-export class EditCarComponent extends AbstractEdit<Car> implements OnInit {
-  protected _data: Car = {} as Car;
+export class EditCarComponent implements OnInit {
+  private _form?: FormGroup;
+  private _carId: string | null = null;
 
-  public override form: FormGroup;
-  public formKeys: Record<keyof Car, keyof Car> = {
-    id: "id",
-    nomeModelo: "nomeModelo",
-    fabricante: "fabricante",
-    codigoUnico: "codigoUnico",
-  };
+  @ViewChild("form") public set form(
+    content: AbstractCreateUpdateComponent<Car>
+  ) {
+    if (content) {
+      this._form = content.form;
+    }
+  }
+
+  public formConfig: FormFieldConfig<CreateCarRequest>[] = [
+    {
+      key: "nomeModelo",
+      label: "Modelo",
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(255),
+      ],
+    },
+    {
+      key: "fabricante",
+      label: "Fabricante",
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(255),
+      ],
+    },
+    {
+      key: "codigoUnico",
+      label: "Código único",
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(255),
+      ],
+    },
+  ];
 
   public get headerTitle(): string {
-    return `Editar o carro ${this.itemId}`;
-  }
-  public get formIsValid(): boolean {
-    return this.form.valid;
+    return "Editar carro " + (this._carId ? ` #${this._carId}` : "");
   }
 
   constructor(
-    protected readonly _messageService: MessageService,
-    protected readonly _carService: CarsService,
     protected readonly _route: ActivatedRoute,
-    protected readonly _location: Location
-  ) {
-    super();
+    private readonly _carsService: CarsService
+  ) {}
 
-    this.form = new FormGroup({
-      nomeModelo: new FormControl("", [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(255),
-      ]),
-      fabricante: new FormControl("", [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(255),
-      ]),
-      codigoUnico: new FormControl("", [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(255),
-      ]),
-    });
-  }
-
-  protected preloadFormValues(): void {
-    this.form.patchValue({
-      [this.formKeys.nomeModelo]: this._data.nomeModelo,
-      [this.formKeys.fabricante]: this._data.fabricante,
-      [this.formKeys.codigoUnico]: this._data.codigoUnico,
-    });
-  }
-
-  protected fetchData(): void {
-    if (!this.itemId) {
-      return;
-    }
-
-    this._carService
-      .getCarById(this.itemId)
+  protected prefetchItemData(id: string): void {
+    this._carsService
+      .getCarById(id)
       .pipe(take(1))
       .subscribe((data) => {
-        this._data = data;
-        this.preloadFormValues();
+        this._form?.patchValue(data);
       });
   }
 
-  protected editItem(): void {
+  public submitForm(data: CreateCarRequest): void {
+    if (!this._carId) {
+      return;
+    }
+
     const payload: Car = {
-      ...this.form.value,
-      id: this.itemId,
+      ...data,
+      id: this._carId,
     };
 
-    this._carService
+    this._carsService
       .updateCar(payload)
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.showSuccessToast();
-          this.goBack();
+          // this.showSuccess("Carro atualizado com sucesso!");
+          // this.goBack();
         },
-        error: this.showErrorToast.bind(this),
+        error: () => {
+          // this.showError("Erro ao atualizar carro!")
+        },
       });
+
+    // if (!this.formIsValid) {
+    //   return this.showError("Erro ao editar carro!");
+    // }
+    // this._carsService
+    //   .updateCar({ ...this.form.value })
+    //   .pipe(take(1))
+    //   .subscribe({
+    //     next: () => {
+    //       this.showSuccess("Carro atualizado com sucesso!");
+    //       this.goBack();
+    //     },
+    //     error: () => this.showError("Erro ao atualizar carro!"),
+    //   });
+  }
+
+  private initRouteListener(): void {
+    this._route.paramMap.subscribe((params: ParamMap) => {
+      const id = params.get("id");
+
+      if (id) {
+        this._carId = id;
+        this.prefetchItemData(id);
+      }
+    });
   }
 
   public ngOnInit(): void {

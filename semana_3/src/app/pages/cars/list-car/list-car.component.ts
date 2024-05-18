@@ -68,6 +68,10 @@ export class ListCarComponent extends AbstractList<Car> implements OnInit {
     });
   }
 
+  public goToCreation(): void {
+    this._router.navigate(["cars", "create"]);
+  }
+
   public override fetchItens(): void {
     this.loading = true;
 
