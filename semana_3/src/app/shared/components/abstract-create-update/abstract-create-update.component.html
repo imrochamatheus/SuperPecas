@@ -1,0 +1,38 @@
+<section class="container">
+  <button
+    mat-raised-button
+    color="primary"
+    class="container__button-back"
+    (click)="goBack()"
+  >
+    Voltar
+  </button>
+  <section class="container__form-wrapper">
+    <form [formGroup]="form" class="form-wrapper__form">
+      @for (field of formConfig; track $index) {
+      <section class="form-group" [class.cdk-visually-hidden]="field.hidden">
+        <label for="{{ field.key }}">{{ field.label }}</label>
+        <input type="text" [formControlName]="field.key.toString()" />
+      </section>
+      }
+    </form>
+    <section class="form-wrapper__actions">
+      <button
+        mat-raised-button
+        class="container__button-back"
+        (click)="clearForm()"
+      >
+        Limpar
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="container__button-back"
+        [disabled]="!formIsValid"
+        (click)="onSubmit()"
+      >
+        Gravar
+      </button>
+    </section>
+  </section>
+</section>
