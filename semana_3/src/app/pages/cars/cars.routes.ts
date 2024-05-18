@@ -1,11 +1,16 @@
 import { Routes } from "@angular/router";
 import { CarsComponent } from "./cars.component";
+import { ListCarComponent } from "./list-car/list-car.component";
 
 export const carsRoutes: Routes = [
   {
     path: "",
     component: CarsComponent,
     children: [
+      {
+        path: "list",
+        component: ListCarComponent,
+      },
       {
         path: "create",
         loadComponent: () =>
