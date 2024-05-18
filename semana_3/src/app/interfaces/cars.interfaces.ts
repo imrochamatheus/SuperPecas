@@ -11,6 +11,7 @@ export interface Car extends CarCommon {
 }
 
 export interface CreateCarRequest extends CarCommon {}
+
 export interface CreateCarResponse extends CarCommon {
   id: number;
 }

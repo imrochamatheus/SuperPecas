@@ -28,10 +28,11 @@
   </section>
 
   <p-table
+    #dt
     class="content__table"
     [value]="items"
-    [loading]="loading"
     [rows]="pageSize"
+    [loading]="loading"
     [totalRecords]="paginationProperties.totalElements ?? 0"
     [rowsPerPageOptions]="[10, 25, 50]"
     [lazy]="true"

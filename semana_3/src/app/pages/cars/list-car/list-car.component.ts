@@ -1,17 +1,23 @@
-import { OnInit, inject, Component } from "@angular/core";
+import {
+  OnInit,
+  inject,
+  Component,
+  ViewChild,
+  AfterViewInit,
+} from "@angular/core";
 import { Router, RouterOutlet } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 
 import { finalize, take } from "rxjs";
 
 import { ButtonModule } from "primeng/button";
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 
 import { MatButton, MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 
 import { Car } from "../../../interfaces/cars.interfaces";
 import { CarsService } from "../../../shared/services/cars.service";
@@ -40,7 +46,14 @@ import { HeaderComponent } from "../../../shared/components/header/header.compon
 export class ListCarComponent extends AbstractList<Car> implements OnInit {
   private readonly _carsService: CarsService = inject(CarsService);
   private readonly _router = inject(Router);
-  private readonly _messageService: MessageService = inject(MessageService);
+
+  protected override readonly _confirmationService: ConfirmationService =
+    inject(ConfirmationService);
+
+  protected override readonly _messageService: MessageService =
+    inject(MessageService);
+
+  @ViewChild("dt") public tableRef?: Table;
 
   public override columns: {
     key: keyof Car;
@@ -50,6 +63,18 @@ export class ListCarComponent extends AbstractList<Car> implements OnInit {
     { key: "fabricante", label: "Fabricante" },
     { key: "codigoUnico", label: "Código Único" },
   ];
+
+  constructor() {
+    super();
+  }
+
+  private showErrorDialog(message: string): void {
+    this._messageService.add({
+      severity: "error",
+      summary: "Erro!",
+      detail: message,
+    });
+  }
 
   public override fetchItens(): void {
     this.loading = true;
@@ -85,14 +110,6 @@ export class ListCarComponent extends AbstractList<Car> implements OnInit {
         next: this.fetchItens.bind(this),
         error: (err) => this.showErrorDialog(err.error),
       });
-  }
-
-  private showErrorDialog(message: string): void {
-    this._messageService.add({
-      severity: "error",
-      summary: "Erro!",
-      detail: message,
-    });
   }
 
   public ngOnInit(): void {
