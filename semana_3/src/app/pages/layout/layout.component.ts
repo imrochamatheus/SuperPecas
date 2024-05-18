@@ -6,6 +6,10 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 
 import { HeaderComponent } from "./../../shared/components/header/header.component";
 
+import { ToastModule } from "primeng/toast";
+import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+
 import { NavLink } from "./layout.interfaces";
 
 @Component({
@@ -13,12 +17,15 @@ import { NavLink } from "./layout.interfaces";
   standalone: true,
   imports: [
     RouterLink,
+    ToastModule,
     RouterOutlet,
     MatListModule,
     HeaderComponent,
     RouterLinkActive,
     MatSidenavModule,
+    ConfirmDialogModule,
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: "./layout.component.html",
   styleUrl: "./layout.component.less",
 })
