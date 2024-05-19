@@ -40,6 +40,7 @@ export class EditCarComponent implements OnInit, OnDestroy {
     {
       key: "nomeModelo",
       label: "Modelo",
+      placeholder: "Ex: Gol",
       validators: [
         Validators.required,
         Validators.minLength(3),
@@ -49,6 +50,7 @@ export class EditCarComponent implements OnInit, OnDestroy {
     {
       key: "fabricante",
       label: "Fabricante",
+      placeholder: "Ex: Volkswagen",
       validators: [
         Validators.required,
         Validators.minLength(3),
@@ -58,6 +60,7 @@ export class EditCarComponent implements OnInit, OnDestroy {
     {
       key: "codigoUnico",
       label: "Código único",
+      placeholder: "Ex: 123456",
       validators: [
         Validators.required,
         Validators.minLength(3),

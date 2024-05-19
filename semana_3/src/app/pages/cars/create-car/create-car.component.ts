@@ -31,6 +31,7 @@ export class CreateCarComponent {
     {
       key: "nomeModelo",
       label: "Modelo",
+      placeholder: "Ex: Gol",
       validators: [
         Validators.required,
         Validators.minLength(3),
@@ -40,6 +41,7 @@ export class CreateCarComponent {
     {
       key: "fabricante",
       label: "Fabricante",
+      placeholder: "Ex: Volkswagen",
       validators: [
         Validators.required,
         Validators.minLength(3),
@@ -49,6 +51,7 @@ export class CreateCarComponent {
     {
       key: "codigoUnico",
       label: "Código único",
+      placeholder: "Ex: 123456",
       validators: [
         Validators.required,
         Validators.minLength(3),
