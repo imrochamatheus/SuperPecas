@@ -15,6 +15,7 @@ import { NavigationService } from "../../../shared/services/navigation.service";
 import {
   TableColumn,
   SearchParams,
+  ActionOutput,
   PaginationConfig,
 } from "../../../shared/components/base-list/base-list.interfaces";
 import { NotificationService } from "../../../shared/services/notification.service";
@@ -80,7 +81,7 @@ export class ListCarComponent {
     });
   }
 
-  public onEditItem(item: Car): void {
+  public onEditItem({ item }: ActionOutput<Car>): void {
     this._navigationService.navigateTo(["cars", item.id, "edit"]);
   }
 
@@ -88,9 +89,12 @@ export class ListCarComponent {
     this._navigationService.navigateTo(["cars", "create"]);
   }
 
-  public onDeleteItem(item: Car): void {
+  public onDeleteItem({ item, page, size }: ActionOutput<Car>): void {
     this._carsService.deleteCar(item.id).subscribe({
-      next: () => this.fetchItens.bind(this),
+      next: () => {
+        this._notificationService.showSuccess("Carro deletado com sucesso!");
+        this.fetchItens({ term: this.searchTerm, page, size });
+      },
       error: () =>
         this._notificationService.showError("Erro ao deletar carro!"),
     });

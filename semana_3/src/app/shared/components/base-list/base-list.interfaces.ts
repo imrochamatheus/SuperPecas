@@ -20,4 +20,10 @@ export interface PaginationConfig {
   numberOfElements?: number;
 }
 
+export interface ActionOutput<T> {
+  item: T;
+  page: string;
+  size: string;
+}
+
 export type ConfirmationMessageFn<T> = (item: T) => string;

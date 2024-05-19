@@ -14,6 +14,7 @@ import { Table, TableLazyLoadEvent, TableModule } from "primeng/table";
 import {
   TableColumn,
   SearchParams,
+  ActionOutput,
   PaginationConfig,
   ConfirmationMessageFn,
 } from "./base-list.interfaces";
@@ -33,10 +34,11 @@ export class BaseListComponent<T> {
   @Input() public deleteConfirmMessage: ConfirmationMessageFn<T> = () =>
     "Tem certeza que deseja excluir este item?";
 
-  @Output() public deleteItem: EventEmitter<T> = new EventEmitter<T>();
-  @Output() public editItem: EventEmitter<T> = new EventEmitter<T>();
   @Output() public fetchItems: EventEmitter<SearchParams> =
     new EventEmitter<SearchParams>();
+  @Output() public deleteItem: EventEmitter<ActionOutput<T>> =
+    new EventEmitter();
+  @Output() public editItem: EventEmitter<ActionOutput<T>> = new EventEmitter();
 
   @ViewChild("dt") public tableRef?: Table;
 
@@ -44,6 +46,14 @@ export class BaseListComponent<T> {
   public currentPage = 1;
 
   constructor(private readonly _confirmationService: ConfirmationService) {}
+
+  private buildEmitPayload(item: T): ActionOutput<T> {
+    return {
+      item,
+      page: String(this.currentPage),
+      size: String(this.pageSize),
+    };
+  }
 
   public onPageChange({ first, rows }: TableLazyLoadEvent): void {
     const page = first ?? this.currentPage;
@@ -67,15 +77,16 @@ export class BaseListComponent<T> {
   }
 
   public onEditItem(item: T): void {
-    this.editItem.emit(item);
+    this.editItem.emit(this.buildEmitPayload(item));
   }
 
   public onDeleteItem(item: T): void {
     this._confirmationService.confirm({
       acceptLabel: "Sim",
       rejectLabel: "Não",
+      header: "Confirmar deleção!",
       message: this.deleteConfirmMessage(item),
-      accept: () => this.deleteItem.emit(item),
+      accept: () => this.deleteItem.emit(this.buildEmitPayload(item)),
     });
   }
 }

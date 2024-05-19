@@ -13,6 +13,7 @@ import { BaseListComponent } from "../../../shared/components/base-list/base-lis
 import {
   TableColumn,
   SearchParams,
+  ActionOutput,
   PaginationConfig,
 } from "../../../shared/components/base-list/base-list.interfaces";
 import { PartsService } from "../../../shared/services/parts.service";
@@ -55,6 +56,10 @@ export class ListPartsComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
+  public deleteConfirmMessageFn(item: Part): string {
+    return `Deseja realmente remover a peça ${item.nome}?`;
+  }
+
   public fetchItens({ term = "", page, size }: SearchParams): void {
     this._partsService
       .listPartsByTermWithPagination(term, page, size)
@@ -80,7 +85,7 @@ export class ListPartsComponent {
     });
   }
 
-  public onEditItem(item: Part): void {
+  public onEditItem({ item }: ActionOutput<Part>): void {
     this._navigationService.navigateTo(["parts", item.id, "edit"]);
   }
 
@@ -88,9 +93,12 @@ export class ListPartsComponent {
     this._navigationService.navigateTo(["parts", "create"]);
   }
 
-  public onDeleteItem(item: Part): void {
+  public onDeleteItem({ item, page, size }: ActionOutput<Part>): void {
     this._partsService.deletePart(item.id).subscribe({
-      next: () => this.fetchItens.bind(this),
+      next: () => {
+        this._notificationService.showSuccess("Peça deletada com sucesso!");
+        this.fetchItens({ term: this.searchTerm, page, size });
+      },
       error: () => this._notificationService.showError("Erro ao deletar peça!"),
     });
   }

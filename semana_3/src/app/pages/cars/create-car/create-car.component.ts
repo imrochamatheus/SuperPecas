@@ -74,7 +74,7 @@ export class CreateCarComponent {
       .subscribe({
         next: () => {
           this._notificationService.showSuccess(
-            "Carro atualizado com sucesso!"
+            "Carro adicionado com sucesso!"
           );
           this._navigationService.goBack();
         },
