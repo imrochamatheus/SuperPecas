@@ -1,40 +1,42 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
-import { take } from "rxjs";
+import { Subject, take, takeUntil } from "rxjs";
+
+import { Car, CreateCarRequest } from "../../../interfaces/cars.interfaces";
+
+import { BaseCreateUpdateComponent } from "../../../shared/components/base-create-update/base-create-update.component";
+import { FormFieldConfig } from "../../../shared/components/base-create-update/base-create-update.interfaces";
+import { HeaderComponent } from "../../../shared/components/header/header.component";
 
 import { CarsService } from "../../../shared/services/cars.service";
-import { Car, CreateCarRequest } from "../../../interfaces/cars.interfaces";
-import { HeaderComponent } from "../../../shared/components/header/header.component";
-import { AbstractCreateUpdateComponent } from "../../../shared/components/abstract-create-update/abstract-create-update.component";
-import { FormFieldConfig } from "../../../shared/components/abstract-create-update/base-create-update.interfaces";
+import { NavigationService } from "../../../shared/services/navigation.service";
+import { NotificationService } from "../../../shared/services/notification.service";
 
 @Component({
   selector: "app-edit-car",
   standalone: true,
-  imports: [AbstractCreateUpdateComponent, HeaderComponent],
-  providers: [CarsService],
+  imports: [BaseCreateUpdateComponent, HeaderComponent],
   template: ` <app-header [title]="headerTitle"></app-header>
-    <app-abstract-create-update
+    <app-base-create-update
       #form
       [formConfig]="formConfig"
       (submitForm)="submitForm($event)"
-    ></app-abstract-create-update>`,
+    ></app-base-create-update>`,
 })
-export class EditCarComponent implements OnInit {
+export class EditCarComponent implements OnInit, OnDestroy {
   private _form?: FormGroup;
   private _carId: string | null = null;
+  private _destroy$: Subject<void> = new Subject();
 
-  @ViewChild("form") public set form(
-    content: AbstractCreateUpdateComponent<Car>
-  ) {
+  @ViewChild("form") public set form(content: BaseCreateUpdateComponent<Car>) {
     if (content) {
       this._form = content.form;
     }
   }
 
-  public formConfig: FormFieldConfig<CreateCarRequest>[] = [
+  public formConfig: FormFieldConfig<Car>[] = [
     {
       key: "nomeModelo",
       label: "Modelo",
@@ -69,11 +71,13 @@ export class EditCarComponent implements OnInit {
   }
 
   constructor(
-    protected readonly _route: ActivatedRoute,
-    private readonly _carsService: CarsService
+    private readonly _route: ActivatedRoute,
+    private readonly _carsService: CarsService,
+    private readonly _navigationService: NavigationService,
+    private readonly _notificationService: NotificationService
   ) {}
 
-  protected prefetchItemData(id: string): void {
+  private prefetchItemData(id: string): void {
     this._carsService
       .getCarById(id)
       .pipe(take(1))
@@ -87,51 +91,44 @@ export class EditCarComponent implements OnInit {
       return;
     }
 
-    const payload: Car = {
-      ...data,
-      id: this._carId,
-    };
-
     this._carsService
-      .updateCar(payload)
+      .updateCar({
+        ...data,
+        id: this._carId,
+      })
       .pipe(take(1))
       .subscribe({
         next: () => {
-          // this.showSuccess("Carro atualizado com sucesso!");
-          // this.goBack();
+          this._notificationService.showSuccess(
+            "Carro atualizado com sucesso!"
+          );
+          this._navigationService.goBack();
         },
         error: () => {
-          // this.showError("Erro ao atualizar carro!")
+          this._notificationService.showError("Erro ao atualizar carro!");
         },
       });
-
-    // if (!this.formIsValid) {
-    //   return this.showError("Erro ao editar carro!");
-    // }
-    // this._carsService
-    //   .updateCar({ ...this.form.value })
-    //   .pipe(take(1))
-    //   .subscribe({
-    //     next: () => {
-    //       this.showSuccess("Carro atualizado com sucesso!");
-    //       this.goBack();
-    //     },
-    //     error: () => this.showError("Erro ao atualizar carro!"),
-    //   });
   }
 
   private initRouteListener(): void {
-    this._route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get("id");
+    this._route.paramMap
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((params: ParamMap) => {
+        const id = params.get("id");
 
-      if (id) {
-        this._carId = id;
-        this.prefetchItemData(id);
-      }
-    });
+        if (id) {
+          this._carId = id;
+          this.prefetchItemData(id);
+        }
+      });
   }
 
   public ngOnInit(): void {
     this.initRouteListener();
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 }
