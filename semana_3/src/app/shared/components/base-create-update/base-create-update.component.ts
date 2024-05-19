@@ -1,9 +1,11 @@
-import { Location } from "@angular/common";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { CommonModule, Location } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 
-import { MessageService } from "primeng/api";
 import { MatButton } from "@angular/material/button";
+import { MessageService } from "primeng/api";
+
+import { Observable } from "rxjs";
 
 import { HeaderComponent } from "../header/header.component";
 import { FormFieldConfig } from "./base-create-update.interfaces";
@@ -11,7 +13,7 @@ import { FormFieldConfig } from "./base-create-update.interfaces";
 @Component({
   selector: "app-base-create-update",
   standalone: true,
-  imports: [ReactiveFormsModule, HeaderComponent, MatButton],
+  imports: [MatButton, CommonModule, HeaderComponent, ReactiveFormsModule],
   templateUrl: "./base-create-update.component.html",
   styleUrl: "./base-create-update.component.less",
 })
@@ -26,6 +28,8 @@ export class BaseCreateUpdateComponent<T> implements OnInit {
   public get formIsValid(): boolean {
     return this.form.valid;
   }
+
+  carOptions$: Observable<string[]> = new Observable<string[]>();
 
   constructor(
     private readonly _messageService: MessageService,

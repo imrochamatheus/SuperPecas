@@ -12,12 +12,27 @@
       @for (field of formConfig; track $index) {
       <section class="form-group" [class.cdk-visually-hidden]="field.hidden">
         <label for="{{ field.key }}">{{ field.label }}</label>
-        <input type="text" [formControlName]="field.key.toString()" />
+
+        @if(field.requestOptions) {
+        <select [formControlName]="field.key.toString()">
+          <option value="" disabled selected hidden>Selecione uma opção</option>
+          @for (option of field.requestOptions.list$| async; track $index) {
+          <option [value]="option[field.requestOptions.valueField]">
+            {{ option[field.requestOptions.displayField] }}
+          </option>
+          }
+        </select>
+        } @else {
+        <input
+          type="text"
+          [attr.placeholder]="field.placeholder"
+          [formControlName]="field.key.toString()"
+        />
+        }
         <div class="form-group__error">
           {{ getFieldError(field.key) }}
         </div>
       </section>
-
       }
     </form>
     <section class="form-wrapper__actions">
