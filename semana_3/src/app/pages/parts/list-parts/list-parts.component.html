@@ -1,0 +1,38 @@
+<app-header title="Listagem de peças"></app-header>
+<section class="content">
+  <section class="content__search-area">
+    <button
+      mat-raised-button
+      color="primary"
+      class="content__search-area-button"
+      (click)="redirectToCreation()"
+    >
+      Cadastrar peça
+    </button>
+
+    <section class="content__search-area--input-wrapper">
+      <input
+        matInput
+        type="text"
+        class="content__search-area--input"
+        placeholder="Buscar por..."
+        [(ngModel)]="searchTerm"
+      />
+      <mat-icon
+        matSuffix
+        class="content__search-area--input-icon"
+        (click)="searchByTerm()"
+        >search</mat-icon
+      >
+    </section>
+  </section>
+
+  <app-base-list
+    [tableData]="tableData"
+    [columns]="tableColumns"
+    [paginationConfig]="paginationProperties"
+    (fetchItems)="fetchItens($event)"
+    (editItem)="onEditItem($event)"
+    (deleteItem)="onDeleteItem($event)"
+  ></app-base-list>
+</section>
