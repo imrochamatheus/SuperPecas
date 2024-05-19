@@ -1,29 +1,33 @@
-import { Component, inject } from "@angular/core";
+import { Component } from "@angular/core";
 import { Validators } from "@angular/forms";
 
 import { take } from "rxjs";
 
 import { CreateCarRequest } from "../../../interfaces/cars.interfaces";
+
 import { HeaderComponent } from "../../../shared/components/header/header.component";
+import { BaseCreateUpdateComponent } from "../../../shared/components/base-create-update/base-create-update.component";
+import { FormFieldConfig } from "../../../shared/components/base-create-update/base-create-update.interfaces";
+
 import { CarsService } from "../../../shared/services/cars.service";
-import { AbstractCreateUpdateComponent } from "../../../shared/components/abstract-create-update/abstract-create-update.component";
-import { FormFieldConfig } from "../../../shared/components/abstract-create-update/base-create-update.interfaces";
+
+import { NavigationService } from "../../../shared/services/navigation.service";
+import { NotificationService } from "../../../shared/services/notification.service";
 
 @Component({
   selector: "app-create-car",
   standalone: true,
-  imports: [HeaderComponent, AbstractCreateUpdateComponent],
+  imports: [HeaderComponent, BaseCreateUpdateComponent],
   template: `
     <app-header [title]="headerTitle"></app-header>
-    <app-abstract-create-update
+    <app-base-create-update
       [formConfig]="formConfig"
       (submitForm)="submitForm($event)"
-    ></app-abstract-create-update>
+    ></app-base-create-update>
   `,
 })
 export class CreateCarComponent {
-  private readonly _carsService = inject(CarsService);
-  public formConfig: FormFieldConfig<CreateCarRequest>[] = [
+  public readonly formConfig: FormFieldConfig<CreateCarRequest>[] = [
     {
       key: "nomeModelo",
       label: "Modelo",
@@ -52,12 +56,16 @@ export class CreateCarComponent {
       ],
     },
   ];
-  //
+
   public get headerTitle(): string {
     return "Adicionar carro";
   }
 
-  constructor() {}
+  constructor(
+    private readonly _carsService: CarsService,
+    private readonly _navigationService: NavigationService,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   public submitForm(payload: CreateCarRequest): void {
     this._carsService
@@ -65,13 +73,13 @@ export class CreateCarComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          // this.showSuccess("Atualizado com sucesso");
-          // this.goBack();
-          console.log("Carro adicionado com sucesso!");
+          this._notificationService.showSuccess(
+            "Carro atualizado com sucesso!"
+          );
+          this._navigationService.goBack();
         },
         error: () => {
-          console.log("Erro ao adicionar carro!");
-          // this.showError("Erro ao adicionar carro!")
+          this._notificationService.showError("Erro ao adicionar carro!");
         },
       });
   }
