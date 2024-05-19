@@ -46,7 +46,7 @@ export class ListPartsComponent {
     { key: "descricao", label: "Descrição" },
     { key: "numeroSerie", label: "Número de série" },
     { key: "fabricante", label: "Fabricante" },
-    { key: "carroId", label: "Carro" },
+    { key: "carroId", label: "Carro", formatter: this.carFormatter },
     { key: "modeloCarro", label: "Modelo do carro" },
   ];
 
@@ -55,6 +55,10 @@ export class ListPartsComponent {
     private readonly _navigationService: NavigationService,
     private readonly _notificationService: NotificationService
   ) {}
+
+  public carFormatter(part: Part): string {
+    return `${part.carroFabricante} - ${part.carroNomeModelo}`;
+  }
 
   public deleteConfirmMessageFn(item: Part): string {
     return `Deseja realmente remover a peça ${item.nome}?`;
