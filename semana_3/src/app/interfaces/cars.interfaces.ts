@@ -1,4 +1,4 @@
-import { PaginationProperties } from "./pagination.interfaces";
+import { PaginationConfig } from "../shared/components/base-list/base-list.interfaces";
 
 interface CarCommon {
   nomeModelo: string;
@@ -16,6 +16,6 @@ export interface CreateCarResponse extends CarCommon {
   id: string;
 }
 
-export interface ListCarResponse extends PaginationProperties {
+export interface ListCarResponse extends PaginationConfig {
   content: Car[];
 }
