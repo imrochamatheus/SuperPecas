@@ -1,11 +1,16 @@
 import { Routes } from "@angular/router";
 import { PartsComponent } from "./parts.component";
+import { ListPartsComponent } from "./list-parts/list-parts.component";
 
 export const partsRoutes: Routes = [
   {
     path: "",
     component: PartsComponent,
     children: [
+      {
+        path: "",
+        component: ListPartsComponent,
+      },
       {
         path: "create",
         loadComponent: () =>
