@@ -1,83 +1,38 @@
 <app-header title="Listagem de carros"></app-header>
-
 <section class="content">
   <section class="content__search-area">
     <button
-      class="content__search-area-button"
       mat-raised-button
       color="primary"
-      (click)="goToCreation()"
+      class="content__search-area-button"
+      (click)="redirectToCreation()"
     >
       Cadastrar carro
     </button>
 
     <section class="content__search-area--input-wrapper">
       <input
-        type="text"
         matInput
+        type="text"
+        class="content__search-area--input"
         placeholder="Selecione um modelo"
         [(ngModel)]="searchTerm"
-        class="content__search-area--input"
       />
       <mat-icon
         matSuffix
         class="content__search-area--input-icon"
-        (click)="search()"
+        (click)="searchByTerm()"
         >search</mat-icon
       >
     </section>
   </section>
 
-  <p-table
-    #dt
-    class="content__table"
-    [value]="items"
-    [rows]="pageSize"
-    [loading]="loading"
-    [totalRecords]="paginationProperties.totalElements ?? 0"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    [lazy]="true"
-    [paginator]="true"
-    [scrollable]="true"
-    [showCurrentPageReport]="true"
-    [currentPageReportTemplate]="
-      'Exibindo de {first} a {last} para {totalRecords} registros'
-    "
-    [scrollHeight]="'500px'"
-    (onLazyLoad)="pageChange($event)"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        @for (column of columns; track $index) {
-        <th class="content__table-header-cell">{{ column.label }}</th>
-        }
-        <th class="content__table-header-cell">Ações</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr>
-        @for (column of columns; track $index) {
-        <td class="content__table-cell">{{ item[column.key] }}</td>
-        }
-        <td class="content__table-cell">
-          <button
-            mat-fab
-            color="primary"
-            class="content__table-action-button"
-            (click)="onEditItem(item)"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button
-            mat-fab
-            color="warn"
-            class="content__table-action-button"
-            (click)="openDeleteDialog(item)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+  <app-base-list
+    [tableData]="tableData"
+    [columns]="tableColumns"
+    [paginationConfig]="paginationProperties"
+    (fetchItems)="fetchItens($event)"
+    (editItem)="onEditItem($event)"
+    (deleteItem)="onDeleteItem($event)"
+  ></app-base-list>
 </section>
