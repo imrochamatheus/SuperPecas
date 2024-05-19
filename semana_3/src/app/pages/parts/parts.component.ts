@@ -5,12 +5,18 @@ import { HeaderComponent } from "../../shared/components/header/header.component
 import { NavigationService } from "../../shared/services/navigation.service";
 import { NotificationService } from "../../shared/services/notification.service";
 import { PartsService } from "../../shared/services/parts.service";
+import { CarsService } from "../../shared/services/cars.service";
 
 @Component({
   selector: "app-parts",
   standalone: true,
   imports: [HeaderComponent, RouterOutlet],
-  providers: [PartsService, NavigationService, NotificationService],
+  providers: [
+    PartsService,
+    CarsService,
+    NavigationService,
+    NotificationService,
+  ],
   template: `<router-outlet></router-outlet>`,
 })
 export class PartsComponent {}
