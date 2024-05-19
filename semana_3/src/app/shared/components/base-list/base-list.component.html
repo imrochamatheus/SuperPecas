@@ -1,0 +1,51 @@
+<p-table
+  #dt
+  class="content__table"
+  [value]="tableData"
+  [rows]="pageSize"
+  [totalRecords]="paginationConfig.totalElements ?? 0"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [lazy]="true"
+  [paginator]="true"
+  [scrollable]="true"
+  [showCurrentPageReport]="true"
+  [currentPageReportTemplate]="
+    'Exibindo de {first} a {last} para {totalRecords} registros'
+  "
+  [scrollHeight]="'500px'"
+  (onLazyLoad)="onPageChange($event)"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      @for (column of columns; track $index) {
+      <th class="content__table-header-cell">{{ column.label }}</th>
+      }
+      <th class="content__table-header-cell">Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      @for (column of columns; track $index) {
+      <td class="content__table-cell">{{ item[column.key] }}</td>
+      }
+      <td class="content__table-cell">
+        <button
+          mat-fab
+          color="primary"
+          class="content__table-action-button"
+          (click)="onEditItem(item)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-fab
+          color="warn"
+          class="content__table-action-button"
+          (click)="onDeleteItem(item)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
