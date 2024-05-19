@@ -11,6 +11,10 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 
 import { NavLink } from "./layout.interfaces";
+import { CarsService } from "../../shared/services/cars.service";
+import { NavigationService } from "../../shared/services/navigation.service";
+import { NotificationService } from "../../shared/services/notification.service";
+import { PartsService } from "../../shared/services/parts.service";
 
 @Component({
   selector: "app-layout",
@@ -25,7 +29,14 @@ import { NavLink } from "./layout.interfaces";
     MatSidenavModule,
     ConfirmDialogModule,
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [
+    CarsService,
+    PartsService,
+    MessageService,
+    NavigationService,
+    ConfirmationService,
+    NotificationService,
+  ],
   templateUrl: "./layout.component.html",
   styleUrl: "./layout.component.less",
 })
