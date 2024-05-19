@@ -61,7 +61,7 @@ export class CarsService {
     return this._http.post<CreateCarResponse>(`${this.baseUrl}`, payload);
   }
 
-  public updateCar(payload: CreateCarRequest): Observable<CreateCarResponse> {
+  public updateCar(payload: Car): Observable<CreateCarResponse> {
     return this._http.put<CreateCarResponse>(`${this.baseUrl}`, payload);
   }
 
