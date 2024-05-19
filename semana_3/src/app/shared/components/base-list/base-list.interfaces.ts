@@ -19,3 +19,5 @@ export interface PaginationConfig {
   totalElements?: number;
   numberOfElements?: number;
 }
+
+export type ConfirmationMessageFn<T> = (item: T) => string;

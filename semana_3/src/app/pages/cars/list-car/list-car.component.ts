@@ -51,6 +51,10 @@ export class ListCarComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
+  public deleteConfirmMessageFn(item: Car): string {
+    return `Deseja realmente remover o carro ${item.nomeModelo}?`;
+  }
+
   public fetchItens({ term = "", page, size }: SearchParams): void {
     this._carsService
       .listCarsByTermWithPagination(term, page, size)

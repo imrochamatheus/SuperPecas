@@ -31,6 +31,7 @@
     [tableData]="tableData"
     [columns]="tableColumns"
     [paginationConfig]="paginationProperties"
+    [deleteConfirmMessage]="deleteConfirmMessageFn"
     (fetchItems)="fetchItens($event)"
     (editItem)="onEditItem($event)"
     (deleteItem)="onDeleteItem($event)"

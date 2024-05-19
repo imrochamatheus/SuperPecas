@@ -15,6 +15,7 @@ import {
   TableColumn,
   SearchParams,
   PaginationConfig,
+  ConfirmationMessageFn,
 } from "./base-list.interfaces";
 
 @Component({
@@ -29,6 +30,8 @@ export class BaseListComponent<T> {
   @Input() public tableData: T[] = [];
   @Input() public columns: TableColumn<T>[] = [];
   @Input() public paginationConfig: PaginationConfig = {};
+  @Input() public deleteConfirmMessage: ConfirmationMessageFn<T> = () =>
+    "Tem certeza que deseja excluir este item?";
 
   @Output() public deleteItem: EventEmitter<T> = new EventEmitter<T>();
   @Output() public editItem: EventEmitter<T> = new EventEmitter<T>();
@@ -71,7 +74,7 @@ export class BaseListComponent<T> {
     this._confirmationService.confirm({
       acceptLabel: "Sim",
       rejectLabel: "Não",
-      message: "Tem certeza que deseja excluir este item?",
+      message: this.deleteConfirmMessage(item),
       accept: () => this.deleteItem.emit(item),
     });
   }
