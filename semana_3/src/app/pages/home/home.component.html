@@ -1,2 +1,9 @@
-<app-header title="Super peças" />
-<p>Home works!</p>
+<app-header [title]="title" />
+<section class="charts__wrapper">
+  <div class="chart">
+    <app-chart [config]="topKManufacturers"> </app-chart>
+  </div>
+  <div class="chart">
+    <app-chart [config]="topKCarsWithMostParts"> </app-chart>
+  </div>
+</section>
