@@ -24,7 +24,6 @@ import { NotificationService } from "../../../shared/services/notification.servi
       (submitForm)="submitForm($event)"
     ></app-base-create-update>
   `,
-  styleUrl: "./create-parts.component.less",
 })
 export class CreatePartsComponent {
   public readonly carsList$ = this._carService.listCars().pipe(take(1));

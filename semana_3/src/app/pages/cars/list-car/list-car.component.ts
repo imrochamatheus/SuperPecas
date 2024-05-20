@@ -90,13 +90,16 @@ export class ListCarComponent {
   }
 
   public onDeleteItem({ item, page, size }: ActionOutput<Car>): void {
-    this._carsService.deleteCar(item.id).subscribe({
-      next: () => {
-        this._notificationService.showSuccess("Carro deletado com sucesso!");
-        this.fetchItens({ term: this.searchTerm, page, size });
-      },
-      error: () =>
-        this._notificationService.showError("Erro ao deletar carro!"),
-    });
+    this._carsService
+      .deleteCar(item.id)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this._notificationService.showSuccess("Carro deletado com sucesso!");
+          this.fetchItens({ term: this.searchTerm, page, size });
+        },
+        error: () =>
+          this._notificationService.showError("Erro ao deletar carro!"),
+      });
   }
 }

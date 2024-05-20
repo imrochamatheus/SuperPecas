@@ -98,12 +98,16 @@ export class ListPartsComponent {
   }
 
   public onDeleteItem({ item, page, size }: ActionOutput<Part>): void {
-    this._partsService.deletePart(item.id).subscribe({
-      next: () => {
-        this._notificationService.showSuccess("Peça deletada com sucesso!");
-        this.fetchItens({ term: this.searchTerm, page, size });
-      },
-      error: () => this._notificationService.showError("Erro ao deletar peça!"),
-    });
+    this._partsService
+      .deletePart(item.id)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this._notificationService.showSuccess("Peça deletada com sucesso!");
+          this.fetchItens({ term: this.searchTerm, page, size });
+        },
+        error: () =>
+          this._notificationService.showError("Erro ao deletar peça!"),
+      });
   }
 }
