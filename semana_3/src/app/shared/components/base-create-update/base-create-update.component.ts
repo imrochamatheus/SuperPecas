@@ -5,8 +5,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatButton } from "@angular/material/button";
 import { MessageService } from "primeng/api";
 
-import { Observable } from "rxjs";
-
 import { HeaderComponent } from "../header/header.component";
 import { FormFieldConfig } from "./base-create-update.interfaces";
 
@@ -28,8 +26,6 @@ export class BaseCreateUpdateComponent<T> implements OnInit {
   public get formIsValid(): boolean {
     return this.form.valid;
   }
-
-  carOptions$: Observable<string[]> = new Observable<string[]>();
 
   constructor(
     private readonly _messageService: MessageService,
