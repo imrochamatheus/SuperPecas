@@ -4,10 +4,11 @@ import { Observable } from "rxjs";
 
 import { environment } from "../../../environments/environments";
 import {
+  Part,
+  ListPartsResponse,
   CreatePartsRequest,
   CreatePartsResponse,
-  ListPartsResponse,
-  Part,
+  TopKCarsWithMostPartsResponse,
 } from "../../interfaces/parts.interfaces";
 
 @Injectable({
@@ -69,5 +70,13 @@ export class PartsService {
 
   public deletePart(id: string): Observable<void> {
     return this._http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  public listTopKCarsWithMostParts(): Observable<
+    TopKCarsWithMostPartsResponse[]
+  > {
+    return this._http.get<TopKCarsWithMostPartsResponse[]>(
+      `${this.baseUrl}/listaTop10CarroComMaisPecas`
+    );
   }
 }

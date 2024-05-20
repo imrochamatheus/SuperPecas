@@ -8,6 +8,7 @@ import {
   ListCarResponse,
   CreateCarRequest,
   CreateCarResponse,
+  Manufacturer,
 } from "../../interfaces/cars.interfaces";
 
 import { environment } from "../../../environments/environments";
@@ -67,5 +68,11 @@ export class CarsService {
 
   public deleteCar(id: string): Observable<void> {
     return this._http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  public listTopKManufacturers(): Observable<Manufacturer[]> {
+    return this._http.get<Manufacturer[]>(
+      `${this.baseUrl}/listaTop10Fabricantes`
+    );
   }
 }
