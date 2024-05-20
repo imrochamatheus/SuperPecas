@@ -24,3 +24,8 @@ export interface CreatePartsResponse extends PartsCommon {
 export interface ListPartsResponse extends PaginationConfig {
   content: Part[];
 }
+
+export interface TopKCarsWithMostPartsResponse {
+  carro: string;
+  quantidade: number;
+}

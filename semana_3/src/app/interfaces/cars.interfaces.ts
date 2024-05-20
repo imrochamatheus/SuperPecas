@@ -6,6 +6,11 @@ interface CarCommon {
   codigoUnico: string;
 }
 
+export interface Manufacturer {
+  fabricante: string;
+  quantidade: number;
+}
+
 export interface Car extends CarCommon {
   id: string;
 }
