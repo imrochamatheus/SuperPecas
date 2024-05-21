@@ -31,8 +31,7 @@ public class CarrosController {
 
     @GetMapping("/listaTodos")
     public ResponseEntity<List<CarroDTO>> listarTodos () {
-        List<Carro> listaCarros = this.carrosService.listarTodos();
-        List<CarroDTO> listaCarrosDTO = listaCarros.stream().map(this::convertCarroToDTO).toList();
+        List<CarroDTO> listaCarrosDTO = this.carrosService.listarTodos();
 
         return new ResponseEntity<>(listaCarrosDTO, HttpStatus.OK);
     }
