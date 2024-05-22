@@ -75,11 +75,15 @@ public class CarrosService {
         Pageable pageable = PageRequest.of(page, size);
 
         return this.carrosRepository
-                .findByModelo(termo, pageable).map(this.carroMapper::toDTO);
+                .findByTerm(termo, pageable).map(this.carroMapper::toDTO);
     }
 
     public List<TopKFabricantesDTO> listarTop10Fabricantes() {
         return this.carrosRepository.getTopKFabricantes();
+    }
+
+    public List<String> listarTodosFabricantes () {
+         return this.carrosRepository.findAllFabricantes();
     }
 
     public CarroDTO adicionarCarro(CarroDTO dadosCarro) {

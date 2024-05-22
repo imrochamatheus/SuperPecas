@@ -1,6 +1,5 @@
 package br.com.masterclass.superpecas.controller;
 
-import br.com.masterclass.superpecas.model.Carro;
 import br.com.masterclass.superpecas.model.DTO.ApiResponse;
 import br.com.masterclass.superpecas.model.DTO.CarroDTO;
 import br.com.masterclass.superpecas.model.DTO.TopKFabricantesDTO;
@@ -38,6 +37,12 @@ public class CarrosController {
         Page<CarroDTO> paginaCarroDTO = this.carrosService.listarTodosPaginado(page, size);
 
         return new ApiResponse<>("Sucesso!", paginaCarroDTO);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/listaTodosFabricantes")
+    public ApiResponse<List<String>> listarTodosFabricantes (){
+        List<String> listaFabricantes = this.carrosService.listarTodosFabricantes();
+        return new ApiResponse<>("Sucesso!", listaFabricantes);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/listaTodosPaginado/{termo}")
