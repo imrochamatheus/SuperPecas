@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class TopKFabricantesDTO {
     private String fabricante;
     private Long quantidadeModelos;
-
 }
