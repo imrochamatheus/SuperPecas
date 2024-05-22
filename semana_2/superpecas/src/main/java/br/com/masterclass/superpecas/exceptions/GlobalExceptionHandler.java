@@ -1,6 +1,7 @@
 package br.com.masterclass.superpecas.exceptions;
 
 import br.com.masterclass.superpecas.model.DTO.ApiResponse;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,5 +33,17 @@ public class GlobalExceptionHandler extends RuntimeException {
                 exception.getMessage(),
                 null
         ));
+    }
+
+    @ExceptionHandler(value={PecaNaoEncontradaException.class})
+    protected ResponseEntity<Object> handlePecaNaoEncontradaException (PecaNaoEncontradaException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ApiResponse<>(exception.getMessage(),null));
+    }
+
+    @ExceptionHandler(value = {PecaJaExisteException.class})
+    protected ResponseEntity<Object> handlePecaJaExisteException (PecaJaExisteException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(exception.getMessage(), null));
     }
 }
