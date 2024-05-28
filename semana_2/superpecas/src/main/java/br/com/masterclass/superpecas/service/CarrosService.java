@@ -58,7 +58,7 @@ public class CarrosService {
     public CarroDTO buscarPorId(Long id){
         Optional<Carro> optionalCarro = this.carrosRepository.findById(id);
 
-        if(optionalCarro.isEmpty()) {
+        if(!optionalCarro.isPresent()) {
                 throw new CarroNaoEncontradoException("Nenhum carro com id " + id + " encontrado!");
         }
         return this.carroMapper.toDTO(optionalCarro.get());
