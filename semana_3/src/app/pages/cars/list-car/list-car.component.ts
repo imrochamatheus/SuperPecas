@@ -1,5 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { HttpErrorResponse } from "@angular/common/http";
 
 import { take } from "rxjs";
 
@@ -98,8 +99,9 @@ export class ListCarComponent {
           this._notificationService.showSuccess("Carro deletado com sucesso!");
           this.fetchItens({ term: this.searchTerm, page, size });
         },
-        error: () =>
-          this._notificationService.showError("Erro ao deletar carro!"),
+        error: ({ error }: HttpErrorResponse) => {
+          this._notificationService.showError(error);
+        },
       });
   }
 }
