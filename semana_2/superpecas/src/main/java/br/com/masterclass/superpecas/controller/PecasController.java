@@ -56,7 +56,7 @@ public class PecasController {
         return new ApiResponse<>("Sucesso!", listaTopCarros);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, value = "{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "{id}")
     public ApiResponse<PecaDTO> editarPeca (
             @PathVariable Long id,
             @RequestBody PecaDTO dto
@@ -72,6 +72,4 @@ public class PecasController {
         this.pecasService.excluirPeca(id);
         return new ApiResponse<>("Deletado com sucesso!", null);
     }
-
-
 }

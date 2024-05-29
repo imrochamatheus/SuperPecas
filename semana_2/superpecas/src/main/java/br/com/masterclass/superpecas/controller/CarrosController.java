@@ -69,7 +69,7 @@ public class CarrosController {
         return new ApiResponse<>("Sucesso!", dto);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, value = "{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "{id}")
     public ApiResponse<CarroDTO> atualizarCarro(
             @PathVariable Long id,
             @RequestBody CarroDTO dto
